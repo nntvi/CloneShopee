@@ -17,9 +17,9 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 //   password: string
 //   confirm_password: string
 // }
-type FormData = LoginSchema
+type FormData = Pick<LoginSchema, 'email' | 'password'>
 export default function Login() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -28,7 +28,7 @@ export default function Login() {
     setError,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(schema.omit(['confirm_password']))
+    resolver: yupResolver(schema.pick(['email', 'password']))
   })
   const rules = getRules(getValues)
   const loginMutation = useMutation({
@@ -39,6 +39,7 @@ export default function Login() {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
+        setProfile(data.data.data.user)
         toast.success('Hello, Welcome to my project!')
         navigate('/')
       },

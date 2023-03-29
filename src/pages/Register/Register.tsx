@@ -21,9 +21,11 @@ import Button from 'src/components/Button'
 // }
 
 // -------------- validate cách mới
-type FormData = Schema
+type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
+const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
+
 export default function Register() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
 
   const {
@@ -32,7 +34,7 @@ export default function Register() {
     setError,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(registerSchema)
   })
 
   // validate theo cách cũ
@@ -44,6 +46,7 @@ export default function Register() {
       registerAccountMutation.mutate(body, {
         onSuccess: (data) => {
           setIsAuthenticated(true)
+          setProfile(data.data.data.user)
           toast.success('Hello, Welcome to my project!')
           navigate('/')
         },

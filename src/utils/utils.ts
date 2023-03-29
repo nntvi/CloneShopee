@@ -9,3 +9,8 @@ export function checkAxiosError<T>(error: unknown): error is AxiosError<T> {
 export function isAxiosUnprocessableEntityError<FormError>(error: unknown): error is AxiosError<FormError> {
   return checkAxiosError(error) && error.response?.status === HttpStatusCode.UnprocessableEntity
 }
+
+// cú pháp `-?` -> loại bỏ undefined của key optional
+export type NoUndefinedField<T> = {
+  [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>
+}

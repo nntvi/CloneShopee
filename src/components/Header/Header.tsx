@@ -9,7 +9,6 @@ import { AppContext } from 'src/contexts/app.context'
 import path from 'src/constant/path'
 export default function Header() {
   const { isAuthenticated, setIsAuthenticated, profile } = useContext(AppContext)
-
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
