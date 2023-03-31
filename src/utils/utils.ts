@@ -14,3 +14,20 @@ export function isAxiosUnprocessableEntityError<FormError>(error: unknown): erro
 export type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>
 }
+
+export function rateSale(original: number, sale: number) {
+  return Math.round(((original - sale) / original) * 100) + '%'
+}
+
+export const removeSpecialCharacter = (str: string) =>
+  // eslint-disable-next-line no-useless-escape
+  str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '')
+
+export function generateNameId({ name, id }: { name: string; id: string }) {
+  return removeSpecialCharacter(name).replace(/\s/g, '-') + `-i.${id}`
+}
+
+export function getIdFromNameId(nameId: string) {
+  const arr = nameId.split('-i.')
+  return arr[arr.length - 1]
+}

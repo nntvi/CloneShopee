@@ -4,8 +4,8 @@ import React from 'react'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import path from 'src/constant/path'
 import { orderBy, sortBy } from 'src/constant/product'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 import { ProductListConfig } from 'src/types/product.type'
-import { QueryConfig } from '../ProductList'
 
 interface SortProps {
   pageSize: number
@@ -88,11 +88,11 @@ export default function SortProductList(props: SortProps) {
             <option value='' disabled>
               Giá
             </option>
-            <option className='bg-white text-black' value={orderBy.asc}>
-              Cao nhất
-            </option>
             <option className='bg-white text-black' value={orderBy.desc}>
-              Thấp nhất
+              Giá cao đến thấp
+            </option>
+            <option className='bg-white text-black' value={orderBy.asc}>
+              Giá thấp đến cao
             </option>
           </select>
         </div>

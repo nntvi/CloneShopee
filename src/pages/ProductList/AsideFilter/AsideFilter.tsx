@@ -7,10 +7,10 @@ import Button from 'src/components/Button'
 import InputNumber from 'src/components/InputNumber'
 import RatingStar from 'src/components/RatingStart'
 import path from 'src/constant/path'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 import { Category } from 'src/types/category.types'
 import { ProductListConfig } from 'src/types/product.type'
 import { schema } from 'src/utils/rules'
-import { QueryConfig } from '../ProductList'
 
 interface AsideProps {
   categories: Category[]

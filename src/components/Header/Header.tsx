@@ -1,14 +1,30 @@
-import React, { useContext, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import { arrow, FloatingPortal, useFloating, shift, offset } from '@floating-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Popover from '../Popover'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { logout } from 'src/apis/auth.api'
 import { AppContext } from 'src/contexts/app.context'
 import path from 'src/constant/path'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { useForm } from 'react-hook-form'
+import Input from '../Input'
+import { schema, Schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
+import { purchaseStatus } from 'src/constant/purchase'
+import purchaseApi from 'src/apis/purchase.api'
+import noImage from 'src/assets/images/no-product.png'
+import { formatCurrency } from 'src/types/utils.types'
+
+type FormData = Pick<Schema, 'name'>
+const nameSchema = schema.pick(['name'])
+const MAX_PURCHASE = 5
 export default function Header() {
   const { isAuthenticated, setIsAuthenticated, profile } = useContext(AppContext)
+  const queryConfig = useQueryConfig()
+  const navigate = useNavigate()
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
@@ -19,6 +35,36 @@ export default function Header() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+
+  const { handleSubmit, register } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    const config = queryConfig.order
+      ? omit({ ...queryConfig }, ['order', 'sort_by'])
+      : { ...queryConfig, name: data.name }
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
+  })
+
+  const { data: purchasesInCartData } = useQuery({
+    // useQuery này ko bị gọi lại
+    // chỉ đc gọi lại khi destroy rồi, và qua bên chỗ khác có chạy lại header này thì mới gọi
+    // Header chỉ bị re-render chứ ko bị unmount -> mounting again
+    // đó là lí do ko cần staleTime vẫn ko gọi lại, ko cần set staleTime là Infinity
+
+    queryKey: ['purchases', { status: purchaseStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart })
+  })
+  const purchasesInCart = purchasesInCartData?.data.data
+  console.log(purchasesInCart)
+
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pt-2 pb-5 text-white'>
       <div className='container'>
@@ -124,12 +170,13 @@ export default function Header() {
               </g>
             </svg>
           </Link>
-          <form className='col-span-9'>
+          <form className='col-span-9' onSubmit={onSubmit}>
             <div className='flex rounded-sm bg-white p-1'>
               <input
                 type='text'
                 className='flex-grow border-none bg-transparent px-3 py-2 text-black outline-none'
-                placeholder='Nhập tìm kiếm '
+                placeholder='Nhập tìm kiếm'
+                {...register('name')}
               />
               <button className='flex-shrink-0 rounded-sm bg-orange py-2 px-6 hover:opacity-90'>
                 <svg
@@ -153,66 +200,48 @@ export default function Header() {
             <Popover
               renderPopover={
                 <div className='relative min-w-[400px] max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
-                  <div className='p-2'>
-                    <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
-                    <div className='mt-5 px-2'>
-                      <div className='mt-4 flex items-center'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://www.seiu1000.org/sites/main/files/imagecache/hero/main-images/camera_lense_0.jpeg'
-                            alt=''
-                            className='h-11 w-11 object-cover'
-                          />
-                        </div>
-                        <div className='ml-2 flex-grow overflow-hidden'>
-                          <div className='truncate'>KIM CƯƠNG KIM CƯƠNG KIM CƯƠNG KIM CƯƠNG</div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <div className='text-orange'>469.000 đ</div>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex items-center'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://www.seiu1000.org/sites/main/files/imagecache/hero/main-images/camera_lense_0.jpeg'
-                            alt=''
-                            className='h-11 w-11 object-cover'
-                          />
-                        </div>
-                        <div className='ml-2 flex-grow overflow-hidden'>
-                          <div className='truncate'>KIM CƯƠNG</div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <div className='text-orange'>469.000 đ</div>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex items-center'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://www.seiu1000.org/sites/main/files/imagecache/hero/main-images/camera_lense_0.jpeg'
-                            alt=''
-                            className='h-11 w-11 object-cover'
-                          />
-                        </div>
-                        <div className='ml-2 flex-grow overflow-hidden'>
-                          <div className='truncate'>KIM CƯƠNG</div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <div className='text-orange'>469.000 đ</div>
-                        </div>
+                  {purchasesInCart && purchasesInCart.length === 0 && (
+                    <div className='flex h-[300px] w-[300px] items-center justify-center p-2'>
+                      <div>
+                        <img src={noImage} alt='noImage' className='h-24 w-24' />
+                        <div className='text-gray-300'>Chưa có sản phẩm</div>
                       </div>
                     </div>
-                    <div className='mt-6 flex items-center justify-between'>
-                      <div className='captalize text-xs text-gray-600'>Thêm hàng vào giỏ</div>
-                      <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:bg-opacity-90'>
-                        Xem giỏ hàng
-                      </button>
+                  )}
+                  {purchasesInCart && purchasesInCart.length > 0 && (
+                    <div className='p-4'>
+                      <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
+                      {purchasesInCart.slice(0, MAX_PURCHASE).map((purchase) => (
+                        <div className='mt-2 px-2 pb-2 pt-1 hover:bg-gray-100' key={purchase._id}>
+                          <div className='mt-1 flex items-center'>
+                            <div className='flex-shrink-0'>
+                              <img src={purchase.product.image} alt='' className='h-11 w-11 object-cover' />
+                            </div>
+                            <div className='ml-2 flex-grow overflow-hidden'>
+                              <div className='truncate'>{purchase.product.name}</div>
+                            </div>
+                            <div className='ml-2 flex-shrink-0'>
+                              <div className='text-orange'>{formatCurrency(purchase.product.price)} đ</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      <div className='mt-6 flex items-center justify-between'>
+                        <div className='captalize pl-2 text-xs text-gray-600'>
+                          {purchasesInCart.length > MAX_PURCHASE ? purchasesInCart.length - MAX_PURCHASE : ''} Thêm hàng
+                          vào giỏ
+                        </div>
+                        <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:bg-opacity-90'>
+                          Xem giỏ hàng
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               }
             >
-              <Link to={path.cart}>
+              <Link to={path.cart} className='relative'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -227,6 +256,9 @@ export default function Header() {
                     d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
                   />
                 </svg>
+                <span className='absolute right-[-11px] top-[-10px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange'>
+                  {purchasesInCart?.length}
+                </span>
               </Link>
             </Popover>
           </div>
