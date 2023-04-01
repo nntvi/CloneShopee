@@ -2,8 +2,10 @@ import React, { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import path from 'src/constant/path'
 import { AppContext } from 'src/contexts/app.context'
+import CartLayout from 'src/layouts/CartLayout'
 import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
+import Cart from 'src/pages/Cart'
 import Login from 'src/pages/Login'
 import ProductDetail from 'src/pages/ProductDetail'
 import ProductList from 'src/pages/ProductList'
@@ -29,21 +31,6 @@ export default function useRouteElements() {
   const routeElements = useRoutes([
     {
       path: '',
-      element: <ProtectedRoute />,
-      // login roi => vao duoc profile
-      children: [
-        {
-          path: path.home,
-          element: (
-            <MainLayout>
-              <Profile />
-            </MainLayout>
-          )
-        }
-      ]
-    },
-    {
-      path: '',
       element: <RejectedRoute />,
       children: [
         {
@@ -65,7 +52,30 @@ export default function useRouteElements() {
       ]
     },
     {
-      path: path.home,
+      path: '',
+      element: <ProtectedRoute />,
+      // login roi => vao duoc profile
+      children: [
+        {
+          path: path.profile,
+          element: (
+            <MainLayout>
+              <Profile />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.cart,
+          element: (
+            <CartLayout>
+              <Cart />
+            </CartLayout>
+          )
+        }
+      ]
+    },
+    {
+      path: '',
       index: true, // tránh trường hợp khi dời vị trí của path này ở đâu cũng ko bị trắng page
       element: (
         <MainLayout>
@@ -75,7 +85,6 @@ export default function useRouteElements() {
     },
     {
       path: path.productDetail,
-      index: true,
       element: (
         <MainLayout>
           <ProductDetail />

@@ -17,41 +17,13 @@ import { purchaseStatus } from 'src/constant/purchase'
 import purchaseApi from 'src/apis/purchase.api'
 import noImage from 'src/assets/images/no-product.png'
 import { formatCurrency } from 'src/types/utils.types'
+import NavHeader from '../NavHeader'
+import useSearchProduct from 'src/hooks/useSearchProduct'
 
-type FormData = Pick<Schema, 'name'>
-const nameSchema = schema.pick(['name'])
 const MAX_PURCHASE = 5
 export default function Header() {
-  const { isAuthenticated, setIsAuthenticated, profile } = useContext(AppContext)
-  const queryConfig = useQueryConfig()
-  const navigate = useNavigate()
-  const logoutMutation = useMutation({
-    mutationFn: () => logout(),
-    onSuccess: () => {
-      setIsAuthenticated(false)
-    }
-  })
-
-  const handleLogout = () => {
-    logoutMutation.mutate()
-  }
-
-  const { handleSubmit, register } = useForm<FormData>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(nameSchema)
-  })
-
-  const onSubmit = handleSubmit((data) => {
-    const config = queryConfig.order
-      ? omit({ ...queryConfig }, ['order', 'sort_by'])
-      : { ...queryConfig, name: data.name }
-    navigate({
-      pathname: path.home,
-      search: createSearchParams(config).toString()
-    })
-  })
+  const { isAuthenticated } = useContext(AppContext)
+  const { onSubmitSearch, register } = useSearchProduct()
 
   const { data: purchasesInCartData } = useQuery({
     // useQuery này ko bị gọi lại
@@ -60,108 +32,15 @@ export default function Header() {
     // đó là lí do ko cần staleTime vẫn ko gọi lại, ko cần set staleTime là Infinity
 
     queryKey: ['purchases', { status: purchaseStatus.inCart }],
-    queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart })
+    queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart }),
+    enabled: isAuthenticated
   })
   const purchasesInCart = purchasesInCartData?.data.data
-  console.log(purchasesInCart)
 
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pt-2 pb-5 text-white'>
       <div className='container'>
-        <div className='flex justify-end'>
-          {/* language */}
-          <Popover
-            as={'span'}
-            renderPopover={
-              <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
-                <div className='flex flex-col py-2 pr-28  pl-3 shadow-md'>
-                  <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
-                  <button className='mt-2 py-2 px-3 hover:text-orange'>Tiếng Anh</button>
-                </div>
-              </div>
-            }
-            className={'flex cursor-pointer items-center py-1 hover:text-white/70'}
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='h-6 w-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418'
-              />
-            </svg>
-            <span className='mx-1'>Tiếng Việt</span>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='h-4 w-4'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5'
-              />
-            </svg>
-          </Popover>
-          {/* end language */}
-
-          {/* account */}
-
-          {isAuthenticated && (
-            <Popover
-              className='ml-6 flex cursor-pointer items-center py-1 hover:text-white/70'
-              renderPopover={
-                <div>
-                  <Link
-                    to={path.profile}
-                    className='block bg-white py-3 px-4 text-left hover:bg-slate-100 hover:text-cyan-500'
-                  >
-                    Tài khoản của tôi
-                  </Link>
-                  <Link to={'/'} className='block bg-white py-3 px-4 text-left hover:bg-slate-100 hover:text-cyan-500'>
-                    Đơn mua
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className='block w-full bg-white py-3 px-4 text-left hover:bg-slate-100 hover:text-cyan-500'
-                  >
-                    Logout
-                  </button>
-                </div>
-              }
-            >
-              <div className='mr-2 h-5 w-5 flex-shrink-0'>
-                <img
-                  src='https://www.seiu1000.org/sites/main/files/imagecache/hero/main-images/camera_lense_0.jpeg'
-                  alt='avatar'
-                  className='h-full w-full rounded-full object-cover'
-                />
-              </div>
-              <div>{profile?.email}</div>
-            </Popover>
-          )}
-
-          {!isAuthenticated && (
-            <div className='flex items-center'>
-              <Link to={path.register} className='block  py-3 px-4 text-left hover:text-white'>
-                Đăng kí
-              </Link>
-              <Link to={path.login} className='block py-3  px-4 text-left hover:text-white'>
-                Đăng nhập
-              </Link>
-            </div>
-          )}
-          {/* end account */}
-        </div>
+        <NavHeader />
         <div className='mt-4 grid grid-cols-12 items-center gap-4'>
           <Link to={'/'} className='col-span-2'>
             <svg viewBox='0 0 192 65' className='h-11 w-full fill-white lg:h-11'>
@@ -170,7 +49,7 @@ export default function Header() {
               </g>
             </svg>
           </Link>
-          <form className='col-span-9' onSubmit={onSubmit}>
+          <form className='col-span-9' onSubmit={onSubmitSearch}>
             <div className='flex rounded-sm bg-white p-1'>
               <input
                 type='text'
@@ -200,15 +79,7 @@ export default function Header() {
             <Popover
               renderPopover={
                 <div className='relative min-w-[400px] max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
-                  {purchasesInCart && purchasesInCart.length === 0 && (
-                    <div className='flex h-[300px] w-[300px] items-center justify-center p-2'>
-                      <div>
-                        <img src={noImage} alt='noImage' className='h-24 w-24' />
-                        <div className='text-gray-300'>Chưa có sản phẩm</div>
-                      </div>
-                    </div>
-                  )}
-                  {purchasesInCart && purchasesInCart.length > 0 && (
+                  {purchasesInCart && purchasesInCart.length > 0 ? (
                     <div className='p-4'>
                       <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
                       {purchasesInCart.slice(0, MAX_PURCHASE).map((purchase) => (
@@ -232,34 +103,63 @@ export default function Header() {
                           {purchasesInCart.length > MAX_PURCHASE ? purchasesInCart.length - MAX_PURCHASE : ''} Thêm hàng
                           vào giỏ
                         </div>
-                        <button className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:bg-opacity-90'>
+                        <Link
+                          to={path.cart}
+                          className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:bg-opacity-90'
+                        >
                           Xem giỏ hàng
-                        </button>
+                        </Link>
                       </div>
+                    </div>
+                  ) : (
+                    <div className='flex flex-col items-center justify-center py-10'>
+                      <img src={noImage} alt='noImage' className='h-24 w-24' />
+                      <div className='mt-3 text-gray-300'>Chưa có sản phẩm</div>
                     </div>
                   )}
                 </div>
               }
             >
-              <Link to={path.cart} className='relative'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth={1.5}
-                  stroke='currentColor'
-                  className='h-8 w-8 fill-white'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
-                  />
-                </svg>
-                <span className='absolute right-[-11px] top-[-10px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange'>
-                  {purchasesInCart?.length}
+              {isAuthenticated ? (
+                <Link to={path.cart} className='relative'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='h-8 w-8 fill-white'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+                    />
+                  </svg>
+                  {purchasesInCart && purchasesInCart.length > 0 && (
+                    <span className='absolute right-[-11px] top-[-10px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange'>
+                      {purchasesInCart?.length}
+                    </span>
+                  )}
+                </Link>
+              ) : (
+                <span className='cursor-pointer'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='h-8 w-8 fill-white'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+                    />
+                  </svg>
                 </span>
-              </Link>
+              )}
             </Popover>
           </div>
         </div>

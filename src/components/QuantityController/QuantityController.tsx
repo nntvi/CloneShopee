@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import InputNumber, { InputProps } from '../InputNumber'
 
 interface QuantityProps extends InputProps {
@@ -6,10 +6,12 @@ interface QuantityProps extends InputProps {
   onIncrease?: (value: number) => void
   onDecrease?: (value: number) => void
   onType?: (value: number) => void
+  onFocusOut?: (value: number) => void
   classNameWrapper?: string
 }
 export default function QuantityController(props: QuantityProps) {
-  const { max, onIncrease, onDecrease, onType, classNameWrapper = 'ml-10', value, ...rest } = props
+  const { max, onIncrease, onDecrease, onType, onFocusOut, classNameWrapper = 'ml-10', value, ...rest } = props
+  const [localValue, setLocalValue] = useState<number>(Number(value || 1))
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let _value = Number(e.target.value)
@@ -20,24 +22,31 @@ export default function QuantityController(props: QuantityProps) {
     }
 
     onType && onType(_value)
+    setLocalValue(_value)
   }
 
   const increase = () => {
-    let _value = Number(value) + 1
+    let _value = Number(value || localValue) + 1
     if (max !== undefined && _value > max) {
       _value = max
     }
 
     onIncrease && onIncrease(_value)
+    setLocalValue(_value)
   }
 
   const decrease = () => {
-    let _value = Number(value) - 1
+    let _value = Number(value || localValue) - 1
     if (_value < 1) {
       _value = 1
     }
 
     onDecrease && onDecrease(_value)
+    setLocalValue(_value)
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    onFocusOut && onFocusOut(Number(e.target.value))
   }
   return (
     <div className={`flex items-center ${classNameWrapper}`}>
@@ -57,11 +66,12 @@ export default function QuantityController(props: QuantityProps) {
         </svg>
       </button>
       <InputNumber
-        value={value}
+        value={value || localValue}
         classNameError={'hidden'}
         className=''
         classNameInput='h-8 w-14 border-t border-b border-gray-300 p-1 text-center outline-none'
         onChange={handleChange}
+        onBlur={handleBlur}
         {...rest}
       />
       <button

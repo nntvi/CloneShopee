@@ -14,7 +14,15 @@ export interface PurchaseType {
   createdAt: string
   updatedAt: string
 }
+export interface CartType {
+  product_id: string
+  buy_count: number
+}
 
+export interface ExtendedPurchase extends PurchaseType {
+  disabled: boolean
+  checked: boolean
+}
 // -1: Sản phẩm đang trong giỏ hàng
 // 0: Tất cả sản phâm
 // 1: Sản phẩm đang đợi xác nhận từ chủ shop

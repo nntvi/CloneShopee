@@ -1,9 +1,9 @@
 import { useState } from 'react'
 // eslint-disable-next-line import/no-unresolved
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 import useRouteElements from './hooks/useRouteElement'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const [count, setCount] = useState(0)

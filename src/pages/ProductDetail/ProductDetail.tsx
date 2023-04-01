@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import React, { useEffect, useMemo, useState, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import InputNumber from 'src/components/InputNumber'
 import ProductRating from 'src/components/ProductRating'
@@ -13,6 +13,7 @@ import Product from '../ProductList/Product'
 import purchaseApi from 'src/apis/purchase.api'
 import { purchaseStatus } from 'src/constant/purchase'
 import { toast } from 'react-toastify'
+import path from 'src/constant/path'
 
 export default function ProductDetail() {
   const { nameId } = useParams()
@@ -30,6 +31,7 @@ export default function ProductDetail() {
   const imageRef = useRef<HTMLImageElement>(null)
   const [buyCount, setBuyCount] = useState(1)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (product && product.images.length > 0) {
@@ -42,7 +44,6 @@ export default function ProductDetail() {
   }
 
   const next = () => {
-    console.log(indexImages, (product as ProductType)?.images.length)
     if (indexImages[1] < (product as ProductType)?.images.length) {
       setIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
     }
@@ -107,6 +108,17 @@ export default function ProductDetail() {
       }
     )
   }
+
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product?._id as string })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
+  }
+
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6'>
@@ -201,7 +213,7 @@ export default function ProductDetail() {
               <div className='mt-8 flex items-center bg-gray-50 px-5 py-4'>
                 <div className='text-gray-500 line-through'>đ{formatCurrency(product.price_before_discount)}</div>
                 <div className='ml-3 text-3xl font-medium text-orange'>đ{formatCurrency(product.price)}</div>
-                <div className='text-sx ml-4 rounded-sm bg-orange px-1 font-semibold uppercase text-white'>
+                <div className='text-sx ml-4 rounded-sm bg-orange py-1 px-2 font-semibold uppercase text-white'>
                   {rateSale(product.price_before_discount, product.price)} GIẢM
                 </div>
               </div>
@@ -237,9 +249,12 @@ export default function ProductDetail() {
                   </svg>
                   Thêm vào giỏ hàng
                 </button>
-                <div className='ml-4 flex h-12 cursor-pointer items-center justify-center rounded-sm bg-orange px-4 capitalize text-white hover:bg-orange/90'>
-                  Xem giỏ hàng
-                </div>
+                <button
+                  onClick={buyNow}
+                  className='ml-4 flex h-12 cursor-pointer items-center justify-center rounded-sm bg-orange px-4 capitalize text-white hover:bg-orange/90'
+                >
+                  mua ngay
+                </button>
               </div>
             </div>
           </div>

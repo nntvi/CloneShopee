@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import InputNumber from 'src/components/InputNumber'
+import InputV2 from 'src/components/InputV2'
 import RatingStar from 'src/components/RatingStart'
 import path from 'src/constant/path'
 import { QueryConfig } from 'src/hooks/useQueryConfig'
@@ -153,6 +154,18 @@ export default function AsideFilter(props: AsideProps) {
                 )
               }}
             />
+            {/* <InputV2
+              control={control}
+              name='price_min'
+              type='text'
+              className='grow'
+              placeholder='TỪ'
+              classNameInput='p-1 text-sm w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+              onChange={() => {
+                trigger('price_max')
+              }}
+              classNameError='mb-1 min-h-[1.25rem] text-sm text-red-600'
+            /> */}
             <div className='mx-2 mt-2 shrink-0'>-</div>
             <Controller
               control={control}
