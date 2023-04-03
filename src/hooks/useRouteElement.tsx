@@ -1,19 +1,31 @@
-import React, { useContext } from 'react'
+import React, { Suspense, lazy, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import path from 'src/constant/path'
 import { AppContext } from 'src/contexts/app.context'
-import CartLayout from 'src/layouts/CartLayout'
+// import CartLayout from 'src/layouts/CartLayout'
 import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
-import Cart from 'src/pages/Cart'
-import Login from 'src/pages/Login'
-import ProductDetail from 'src/pages/ProductDetail'
-import ProductList from 'src/pages/ProductList'
-import Register from 'src/pages/Register'
+// import Cart from 'src/pages/Cart'
+// import Login from 'src/pages/Login'
+// import PageNotFound from 'src/pages/PageNotFound'
+// import ProductDetail from 'src/pages/ProductDetail'
+// import ProductList from 'src/pages/ProductList'
+// import Register from 'src/pages/Register'
 import UserLayout from 'src/pages/User/layouts/UserLayout'
-import ChangePassword from 'src/pages/User/pages/ChangePassword'
-import History from 'src/pages/User/pages/HistoryPurchase/History'
-import Profile from 'src/pages/User/pages/Profile'
+// import ChangePassword from 'src/pages/User/pages/ChangePassword'
+// import History from 'src/pages/User/pages/HistoryPurchase/History'
+// import Profile from 'src/pages/User/pages/Profile'
+
+const Login = lazy(() => import('src/pages/Login'))
+const Register = lazy(() => import('src/pages/Register'))
+const CartLayout = lazy(() => import('src/layouts/CartLayout'))
+const Profile = lazy(() => import('src/pages/User/pages/Profile'))
+const ProductDetail = lazy(() => import('src/pages/ProductDetail'))
+const ProductList = lazy(() => import('src/pages/ProductList'))
+const Cart = lazy(() => import('src/pages/Cart'))
+const ChangePassword = lazy(() => import('src/pages/User/pages/ChangePassword'))
+const History = lazy(() => import('src/pages/User/pages/HistoryPurchase/History'))
+const PageNotFound = lazy(() => import('src/pages/PageNotFound'))
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -40,7 +52,9 @@ export default function useRouteElements() {
           path: path.login,
           element: (
             <RegisterLayout>
-              <Login />
+              <Suspense>
+                <Login />
+              </Suspense>
             </RegisterLayout>
           )
         },
@@ -48,7 +62,9 @@ export default function useRouteElements() {
           path: path.register,
           element: (
             <RegisterLayout>
-              <Register />
+              <Suspense>
+                <Register />
+              </Suspense>
             </RegisterLayout>
           )
         }
@@ -69,15 +85,27 @@ export default function useRouteElements() {
           children: [
             {
               path: path.profile,
-              element: <Profile />
+              element: (
+                <Suspense>
+                  <Profile />
+                </Suspense>
+              )
             },
             {
               path: path.password,
-              element: <ChangePassword />
+              element: (
+                <Suspense>
+                  <ChangePassword />
+                </Suspense>
+              )
             },
             {
               path: path.historyPurchase,
-              element: <History />
+              element: (
+                <Suspense>
+                  <History />
+                </Suspense>
+              )
             }
           ]
         },
@@ -85,7 +113,9 @@ export default function useRouteElements() {
           path: path.cart,
           element: (
             <CartLayout>
-              <Cart />
+              <Suspense>
+                <Cart />
+              </Suspense>
             </CartLayout>
           )
         }
@@ -96,7 +126,9 @@ export default function useRouteElements() {
       index: true, // tránh trường hợp khi dời vị trí của path này ở đâu cũng ko bị trắng page
       element: (
         <MainLayout>
-          <ProductList />
+          <Suspense>
+            <ProductList />
+          </Suspense>
         </MainLayout>
       )
     },
@@ -104,7 +136,19 @@ export default function useRouteElements() {
       path: path.productDetail,
       element: (
         <MainLayout>
-          <ProductDetail />
+          <Suspense>
+            <ProductDetail />
+          </Suspense>
+        </MainLayout>
+      )
+    },
+    {
+      path: '*',
+      element: (
+        <MainLayout>
+          <Suspense>
+            <PageNotFound />
+          </Suspense>
         </MainLayout>
       )
     }

@@ -21,9 +21,7 @@ export default function ProductList() {
 
   const { data: categoryData } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => {
-      return getCategory()
-    }
+    queryFn: () => getCategory()
   })
 
   return (
