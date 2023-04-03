@@ -9,6 +9,7 @@ import { HttpStatusCode } from './../constant/httpStatusCode'
 import axios, { AxiosError, type AxiosInstance } from 'axios'
 import { AuthResponse } from 'src/types/auth.types'
 import path from 'src/constant/path'
+import config from 'src/constant/config'
 
 class Http {
   instance: AxiosInstance
@@ -17,7 +18,7 @@ class Http {
     this.accessToken = getAccessTokenFromLocalStorage()
     // init axios
     ;(this.instance = axios.create({
-      baseURL: 'https://api-ecom.duthanhduoc.com/',
+      baseURL: config.baseUrl,
       timeout: 1000,
       headers: {
         'Content-Type': 'application/json'
@@ -37,6 +38,7 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
+        console.log('response', response)
         if (url === path.login || url === path.register) {
           this.accessToken = (response.data as AuthResponse).data.access_token
           saveAccessTokenToLocalStorage(response.data.data.access_token)
@@ -52,7 +54,7 @@ class Http {
       function (error: AxiosError) {
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
           const data: any | undefined = error.response?.data
-          const errorMessage = data.message || error.message
+          const errorMessage = data?.message || error.message
           toast.error(errorMessage)
         }
         return Promise.reject(error)

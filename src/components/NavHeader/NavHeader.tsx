@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { logout } from 'src/apis/auth.api'
 import path from 'src/constant/path'
 import { purchaseStatus } from 'src/constant/purchase'
 import { AppContext } from 'src/contexts/app.context'
+import { getAvatarUrl } from 'src/utils/utils'
 import Popover from '../Popover'
-
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -94,8 +94,8 @@ export default function NavHeader() {
         >
           <div className='mr-2 h-5 w-5 flex-shrink-0'>
             <img
-              src='https://www.seiu1000.org/sites/main/files/imagecache/hero/main-images/camera_lense_0.jpeg'
-              alt='avatar'
+              src={getAvatarUrl(profile?.avatar)}
+              alt={profile?.name}
               className='h-full w-full rounded-full object-cover'
             />
           </div>

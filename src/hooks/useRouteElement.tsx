@@ -9,8 +9,11 @@ import Cart from 'src/pages/Cart'
 import Login from 'src/pages/Login'
 import ProductDetail from 'src/pages/ProductDetail'
 import ProductList from 'src/pages/ProductList'
-import Profile from 'src/pages/Profile'
 import Register from 'src/pages/Register'
+import UserLayout from 'src/pages/User/layouts/UserLayout'
+import ChangePassword from 'src/pages/User/pages/ChangePassword'
+import History from 'src/pages/User/pages/HistoryPurchase/History'
+import Profile from 'src/pages/User/pages/Profile'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -57,12 +60,26 @@ export default function useRouteElements() {
       // login roi => vao duoc profile
       children: [
         {
-          path: path.profile,
+          path: path.user,
           element: (
             <MainLayout>
-              <Profile />
+              <UserLayout />
             </MainLayout>
-          )
+          ),
+          children: [
+            {
+              path: path.profile,
+              element: <Profile />
+            },
+            {
+              path: path.password,
+              element: <ChangePassword />
+            },
+            {
+              path: path.historyPurchase,
+              element: <History />
+            }
+          ]
         },
         {
           path: path.cart,
