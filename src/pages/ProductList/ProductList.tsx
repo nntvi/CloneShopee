@@ -7,9 +7,12 @@ import { ProductListConfig } from 'src/types/product.type'
 import AsideFilter from './AsideFilter'
 import Product from './Product/Product'
 import SortProductList from './SortProductList'
+import { Helmet } from 'react-helmet-async'
+import { useTranslation } from 'react-i18next'
 
 export default function ProductList() {
   const queryConfig = useQueryConfig()
+  const { t } = useTranslation('home')
   const { data: productData } = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => {
@@ -26,6 +29,10 @@ export default function ProductList() {
 
   return (
     <div className='bg-gray-200 py-6'>
+      <Helmet>
+        <title>{t('home')} | Shopee Clone</title>
+        <meta name='description' content='Trang chủ cho dự án shopee clone by Tuong Vi' />
+      </Helmet>
       <div className='container'>
         {productData && (
           <div className='grid grid-cols-12 gap-6'>

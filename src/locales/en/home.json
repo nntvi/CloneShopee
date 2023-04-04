@@ -24,5 +24,6 @@
     "price": "price",
     "asc_price": "Price from low to high",
     "desc_price": "Price from high to low"
-  }
+  },
+  "home": "Home"
 }

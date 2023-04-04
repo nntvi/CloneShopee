@@ -1,7 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { login } from 'src/apis/auth.api'
@@ -19,6 +21,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 // }
 type FormData = Pick<LoginSchema, 'email' | 'password'>
 export default function Login() {
+  const { t } = useTranslation('profile')
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
@@ -61,6 +64,10 @@ export default function Login() {
 
   return (
     <div className='bg-orange'>
+      <Helmet>
+        <title>{t('login')} | Shopee Clone</title>
+        <meta name='description' content={t('login')} />
+      </Helmet>
       <div className='container'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>

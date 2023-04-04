@@ -15,6 +15,7 @@ import { getAvatarUrl, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import DateSelect from '../../components/DateSelect'
 import config from 'src/constant/config'
 import InputFile from 'src/components/InputFile'
+import { Helmet } from 'react-helmet-async'
 
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 // vì date_of_birth ban đầu khai báo kiểu Date (new Date)
@@ -33,6 +34,10 @@ function Info() {
   } = useFormContext<FormData>()
   return (
     <>
+      <Helmet>
+        <title>Tài khoản | Shopee Clone</title>
+        <meta name='description' content='Quản lý tài khoản cho dự án shopee clone by Tuong Vi' />
+      </Helmet>
       <div className='mt-6 flex flex-col flex-wrap sm:flex-row'>
         <div className='w-[20%] truncate pt-3 text-right'>Tên</div>
         <div className='w-[80%] pl-5'>

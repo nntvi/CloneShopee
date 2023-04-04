@@ -27,7 +27,7 @@ class Http {
     this.refreshToken = getRefreshTokenFromLocalStorage()
     this.refreshTokenRequest = null
     // init axios
-    ;(this.instance = axios.create({
+    this.instance = axios.create({
       baseURL: config.baseUrl,
       timeout: 1000,
       headers: {
@@ -35,19 +35,19 @@ class Http {
         'expire-access-token': 10, // 10s
         'expire-refresh-token': 60 * 60 // 1 h nha
       }
-    })),
-      this.instance.interceptors.request.use(
-        (config) => {
-          if (this.accessToken && config.headers) {
-            config.headers.Authorization = this.accessToken
-            return config
-          }
+    })
+    this.instance.interceptors.request.use(
+      (config) => {
+        if (this.accessToken && config.headers) {
+          config.headers.Authorization = this.accessToken
           return config
-        },
-        (error) => {
-          return Promise.reject(error)
         }
-      )
+        return config
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
 
     this.instance.interceptors.response.use(
       (response) => {

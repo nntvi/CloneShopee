@@ -15,6 +15,7 @@ import { generateNameId } from 'src/utils/utils'
 import noImage from 'src/assets/images/no-product.png'
 import path from 'src/constant/path'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet-async'
 
 export default function Cart() {
   const { t } = useTranslation('product')
@@ -161,6 +162,10 @@ export default function Cart() {
   }
   return (
     <div className='bt-neutral-100 py-16'>
+      <Helmet>
+        <title>{t('cart.name')} | Shopee Clone</title>
+        <meta name='description' content='Giỏ hàng cho dự án shopee clone by Tuong Vi' />
+      </Helmet>
       <div className='container'>
         {purchaseData && purchaseData?.length > 0 ? (
           <Fragment>
