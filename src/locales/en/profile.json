@@ -1,0 +1,37 @@
+{
+  "account": {
+    "my_profile": {
+      "name": "My profile",
+      "update": "Update profile",
+      "manage": "Manage profile information for account security",
+      "username": "Username",
+      "phone": "Phone",
+      "address": "Address",
+      "birthday": "Birthday",
+      "select_image": "Select image"
+    }
+  },
+  "change_password": {
+    "name": "Change password",
+    "new": "New password",
+    "old": "Old password",
+    "new_confirm": "New password confirm"
+  },
+  "history_purchase": {
+    "name": "History purchase",
+    "all": "All",
+    "waiting_confirm": "Waiting confirm",
+    "waiting_purchase": "Waiting purchase",
+    "delivery": "Delivery",
+    "delivered": "Delivered",
+    "canceled": "Canceled"
+  },
+  "register": "Register",
+  "login": "Login",
+  "form_register_login": {
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "have_not_account": "Do not have an account?",
+    "have_yet_account": "Do you already have an account?"
+  }
+}

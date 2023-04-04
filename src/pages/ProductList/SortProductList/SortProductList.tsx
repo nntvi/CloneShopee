@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import omit from 'lodash/omit'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import path from 'src/constant/path'
 import { orderBy, sortBy } from 'src/constant/product'
@@ -13,6 +14,7 @@ interface SortProps {
 }
 export default function SortProductList(props: SortProps) {
   const { queryConfig, pageSize } = props
+  const { t } = useTranslation('home')
   const { sort_by = sortBy.view, order } = queryConfig
   const navigate = useNavigate()
   const page = Number(queryConfig.page)
@@ -49,7 +51,7 @@ export default function SortProductList(props: SortProps) {
     <div className='bg-gray-300/40 py-4 px-3'>
       <div className='flex flex-wrap items-center justify-between gap-2'>
         <div className='flex items-center'>
-          <div>Sắp xếp theo</div>
+          <div>{t('filter_product.sort_by')}</div>
           <button
             onClick={() => handleFilter(sortBy.view)}
             className={classNames('ml-2 h-8  px-4 text-center text-sm capitalize ', {
@@ -57,7 +59,7 @@ export default function SortProductList(props: SortProps) {
               'bg-white text-black hover:bg-slate-100': !isActiveSort(sortBy.view)
             })}
           >
-            Phổ biến
+            {t('filter_product.popular')}
           </button>
           <button
             onClick={() => handleFilter(sortBy.createAt)}
@@ -66,7 +68,7 @@ export default function SortProductList(props: SortProps) {
               'bg-white text-black hover:bg-slate-100': !isActiveSort(sortBy.createAt)
             })}
           >
-            Mới nhất
+            {t('filter_product.latest')}
           </button>
           <button
             onClick={() => handleFilter(sortBy.sold)}
@@ -75,7 +77,7 @@ export default function SortProductList(props: SortProps) {
               'bg-white text-black hover:bg-slate-100': !isActiveSort(sortBy.sold)
             })}
           >
-            Bán chạy
+            {t('filter_product.best_seller')}
           </button>
           <select
             className={classNames('ml-2 h-8 px-4 text-left text-sm capitalize', {
@@ -86,13 +88,13 @@ export default function SortProductList(props: SortProps) {
             onChange={(e) => handlePriceOrder(e.target.value as Exclude<ProductListConfig['order'], undefined>)}
           >
             <option value='' disabled>
-              Giá
+              {t('filter_product.price')}
             </option>
             <option className='bg-white text-black' value={orderBy.desc}>
-              Giá cao đến thấp
+              {t('filter_product.desc_price')}
             </option>
             <option className='bg-white text-black' value={orderBy.asc}>
-              Giá thấp đến cao
+              {t('filter_product.asc_price')}
             </option>
           </select>
         </div>

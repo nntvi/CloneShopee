@@ -1,0 +1,28 @@
+{
+  "header": {
+    "my_account": "My Account",
+    "my_purchase": "My purchase",
+    "logout": "Logout",
+    "search": "Enter your search"
+  },
+  "aside_filter": {
+    "all_categories": "All categories",
+    "filter_search": "Filter",
+    "range_price": "Range price",
+    "rate": "Rate",
+    "from": "From",
+    "to": "To",
+    "delete_all": "Delete all",
+    "apply": "Apply",
+    "above": "Above"
+  },
+  "filter_product": {
+    "sort_by": "Sort by",
+    "popular": "Popular",
+    "latest": "Latest",
+    "best_seller": "Best seller",
+    "price": "price",
+    "asc_price": "Price from low to high",
+    "desc_price": "Price from high to low"
+  }
+}

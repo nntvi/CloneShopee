@@ -10,12 +10,13 @@ import useSearchProduct from 'src/hooks/useSearchProduct'
 import { formatCurrency } from 'src/types/utils.types'
 import NavHeader from '../NavHeader'
 import Popover from '../Popover'
+import { useTranslation } from 'react-i18next'
 
 const MAX_PURCHASE = 5
 export default function Header() {
   const { isAuthenticated } = useContext(AppContext)
   const { onSubmitSearch, register } = useSearchProduct()
-
+  const { t } = useTranslation(['product'])
   const { data: purchasesInCartData } = useQuery({
     // useQuery này ko bị gọi lại
     // chỉ đc gọi lại khi destroy rồi, và qua bên chỗ khác có chạy lại header này thì mới gọi
@@ -72,7 +73,7 @@ export default function Header() {
                 <div className='relative min-w-[400px] max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
                   {purchasesInCart && purchasesInCart.length > 0 ? (
                     <div className='p-4'>
-                      <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
+                      <div className='capitalize text-gray-400'>{t('product:cart.new_products')}</div>
                       {purchasesInCart.slice(0, MAX_PURCHASE).map((purchase) => (
                         <div className='mt-2 px-2 pb-2 pt-1 hover:bg-gray-100' key={purchase._id}>
                           <div className='mt-1 flex items-center'>
@@ -91,21 +92,21 @@ export default function Header() {
 
                       <div className='mt-6 flex items-center justify-between'>
                         <div className='captalize pl-2 text-xs text-gray-600'>
-                          {purchasesInCart.length > MAX_PURCHASE ? purchasesInCart.length - MAX_PURCHASE : ''} Thêm hàng
-                          vào giỏ
+                          {purchasesInCart.length > MAX_PURCHASE ? purchasesInCart.length - MAX_PURCHASE : ''}{' '}
+                          {t('product:cart.add_to_cart')}
                         </div>
                         <Link
                           to={path.cart}
                           className='rounded-sm bg-orange px-4 py-2 capitalize text-white hover:bg-opacity-90'
                         >
-                          Xem giỏ hàng
+                          {t('product:cart.view_cart')}
                         </Link>
                       </div>
                     </div>
                   ) : (
                     <div className='flex flex-col items-center justify-center py-10'>
                       <img src={noImage} alt='noImage' className='h-24 w-24' />
-                      <div className='mt-3 text-gray-300'>Chưa có sản phẩm</div>
+                      <div className='mt-3 text-gray-300'>{t('product:cart.empty')}</div>
                     </div>
                   )}
                 </div>

@@ -1,0 +1,32 @@
+{
+  "category": {
+    "shirt": "T-shirt",
+    "watch": "Watch",
+    "Phone": "Phone"
+  },
+  "cart": {
+    "name": "Cart",
+    "new_products": "New product(s)",
+    "add_to_cart": "Add to cart",
+    "view_cart": "View cart",
+    "buy_now": "Buy now",
+    "product": "Product",
+    "unit_price": "Unit price",
+    "total": "Total price",
+    "select_all": "Select all",
+    "total_payment": "Total payment",
+    "saving": "Saving",
+    "buy": "Buy",
+    "act": "Action",
+    "delete": "Delete",
+    "empty": "Your cart is empty"
+  },
+  "product": {
+    "sold": "Sold",
+    "discount": "discount",
+    "available": "available product",
+    "quantity": "Quantity",
+    "desc": "Product description",
+    "recommended_products": "Recommended products"
+  }
+}

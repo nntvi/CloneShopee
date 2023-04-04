@@ -2,10 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames'
 import omit from 'lodash/omit'
 import { Controller, useForm } from 'react-hook-form'
-import { createSearchParams, Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import InputNumber from 'src/components/InputNumber'
-import InputV2 from 'src/components/InputV2'
 import RatingStar from 'src/components/RatingStart'
 import path from 'src/constant/path'
 import { QueryConfig } from 'src/hooks/useQueryConfig'
@@ -28,7 +28,7 @@ export default function AsideFilter(props: AsideProps) {
   const { categories, queryConfig } = props
   const { category } = queryConfig
   const navigate = useNavigate()
-
+  const { t } = useTranslation(['home', 'product'])
   const {
     control,
     handleSubmit,
@@ -80,7 +80,7 @@ export default function AsideFilter(props: AsideProps) {
             </g>
           </g>
         </svg>
-        Tất cả danh mục
+        {t('home:aside_filter.all_categories')}
       </Link>
       {/* end title category */}
 
@@ -128,11 +128,11 @@ export default function AsideFilter(props: AsideProps) {
             </g>
           </g>
         </svg>
-        bộ lọc tìm kiếm
+        {t('home:aside_filter.filter_search')}
       </Link>
       <div className='my-4 h-[1px] bg-gray-300'></div>
       <div className='my-5'>
-        <div className='flex-start flex text-sm text-gray-500'>Khoảng giá</div>
+        <div className='flex-start flex text-sm text-gray-500'>{t('home:aside_filter.range_price')}</div>
         <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
             <Controller
@@ -143,7 +143,7 @@ export default function AsideFilter(props: AsideProps) {
                   <InputNumber
                     type='text'
                     className='grow'
-                    placeholder='TỪ'
+                    placeholder={t('home:aside_filter.from')}
                     classNameInput='p-1 text-sm w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                     {...field}
                     onChange={(e) => {
@@ -175,7 +175,7 @@ export default function AsideFilter(props: AsideProps) {
                   <InputNumber
                     type='text'
                     className='grow'
-                    placeholder='ĐẾN'
+                    placeholder={t('home:aside_filter.to')}
                     classNameInput='p-1 text-sm w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                     {...field}
                     onChange={(e) => {
@@ -188,8 +188,8 @@ export default function AsideFilter(props: AsideProps) {
             />
           </div>
           <div className='mb-1 min-h-[1.25rem] text-sm text-red-600'>{errors.price_min?.message}</div>
-          <Button className='flex w-full items-center justify-center bg-orange p-2 text-sm text-white hover:bg-orange'>
-            ÁP DỤNG
+          <Button className='flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white hover:bg-orange'>
+            {t('home:aside_filter.apply')}
           </Button>
         </form>
       </div>
@@ -198,7 +198,7 @@ export default function AsideFilter(props: AsideProps) {
 
       {/* assess */}
       <div className='my-4 h-[1px] bg-gray-300 pt-[-5px]'></div>
-      <div className='flex-start flex text-sm text-gray-500'>Đánh Giá</div>
+      <div className='flex-start flex text-sm text-gray-500'>{t('home:aside_filter.rate')}</div>
       <div className='my-3'>
         <RatingStar queryConfig={queryConfig} />
       </div>
@@ -207,9 +207,9 @@ export default function AsideFilter(props: AsideProps) {
       <div className='my-4 h-[1px] bg-gray-300'></div>
       <Button
         onClick={cancelFilter}
-        className='flex w-full items-center justify-center bg-orange p-2 text-sm text-white hover:bg-orange'
+        className='flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white hover:bg-orange'
       >
-        XOÁ TẤT CẢ
+        {t('home:aside_filter.delete_all')}
       </Button>
     </div>
   )

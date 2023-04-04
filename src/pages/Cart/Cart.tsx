@@ -14,8 +14,10 @@ import { formatCurrency } from 'src/types/utils.types'
 import { generateNameId } from 'src/utils/utils'
 import noImage from 'src/assets/images/no-product.png'
 import path from 'src/constant/path'
+import { useTranslation } from 'react-i18next'
 
 export default function Cart() {
+  const { t } = useTranslation('product')
   const { data, refetch } = useQuery({
     queryKey: ['purchases', { status: purchaseStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart })
@@ -175,15 +177,15 @@ export default function Cart() {
                           checked={isAllChecked}
                         />
                       </div>
-                      <div className='flex-grow text-black'>Sản phẩm</div>
+                      <div className='flex-grow text-black'>{t('cart.product')}</div>
                     </div>
                   </div>
                   <div className='col-span-6'>
                     <div className='grid grid-cols-5 text-center'>
-                      <div className='col-span-2'>Đơn giá</div>
-                      <div className='col-span-1'>Số lượng</div>
-                      <div className='col-span-1'>Số tiền</div>
-                      <div className='col-span-1'>Thao tác</div>
+                      <div className='col-span-2'>{t('cart.unit_price')}</div>
+                      <div className='col-span-1'>{t('product.quantity')}</div>
+                      <div className='col-span-1'>{t('cart.total')}</div>
+                      <div className='col-span-1'>{t('cart.act')}</div>
                     </div>
                   </div>
                 </div>
@@ -268,7 +270,7 @@ export default function Cart() {
                                 onClick={handleDelete(index)}
                                 className='transition-color bg-none text-black hover:text-orange'
                               >
-                                Xoá
+                                {t('cart.delete')}
                               </button>
                             </div>
                           </div>
@@ -289,19 +291,21 @@ export default function Cart() {
                 />
               </div>
               <button className='bb-none mx-3 border-none' onClick={handleCheckedAll}>
-                Chọn tất cả {`(${extendedPurchases.length})`}
+                {t('cart.select_all')} {` (${extendedPurchases.length})`}
               </button>
               <button className='bb-none mx-3 border-none' onClick={handleDeleteManyPurchase}>
-                Xoá
+                {t('cart.delete')}
               </button>
               <div className='mt-5 flex flex-col items-center sm:ml-auto sm:mt-0 sm:flex-row'>
                 <div className='flex items-center'>
                   <div className='flex items-center sm:justify-end'>
-                    <div>Tổng thanh toán ({checkedPurchaseCount} sản phẩm)</div>
+                    <div>
+                      {t('cart.delete')} ({checkedPurchaseCount} {t('cart.product')})
+                    </div>
                     <div className='ml-2 text-2xl text-orange'>₫ {formatCurrency(totalCheckedPurchasePrice)}</div>
                   </div>
                   <div className='ml-1 flex items-center sm:justify-end'>
-                    <div className='text-gray-500'>Tiết kiệm</div>
+                    <div className='text-gray-500'>{t('cart.saving')}</div>
                     <div className='ml-6 text-orange'>₫ {formatCurrency(totalCheckedPurchaseSavingPrice)}</div>
                   </div>
                 </div>
@@ -310,7 +314,7 @@ export default function Cart() {
                   className='mt-5 h-10 w-52 bg-red-500 text-center text-sm uppercase text-white hover:bg-red-600 sm:ml-5 sm:mt-0'
                   disabled={buyPurchaseMutation.isLoading}
                 >
-                  Mua hàng
+                  {t('cart.buy')}
                 </Button>
               </div>
             </div>
@@ -318,12 +322,12 @@ export default function Cart() {
         ) : (
           <div className='flex flex-col items-center justify-center py-10'>
             <img src={noImage} alt='noImage' className='h-24 w-24' />
-            <div className='mt-3 font-bold'>Giỏ hàng của bạn còn trống</div>
+            <div className='mt-3 font-bold'>{t('cart.empty')}</div>
             <Link
               to={path.home}
               className='mt-5 flex h-12 cursor-pointer items-center justify-center rounded-sm bg-orange px-5 uppercase text-white hover:bg-orange/90'
             >
-              mua ngay
+              {t('cart.buy')}
             </Link>
           </div>
         )}

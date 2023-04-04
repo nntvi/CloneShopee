@@ -1,0 +1,37 @@
+{
+  "account": {
+    "my_profile": {
+      "name": "Tài khoản của tôi",
+      "update": "Sửa hồ sơ",
+      "manage": "Quản lý thông tin hồ sơ để bảo mật tài khoản",
+      "username": "Tên",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "birthday": "Ngày sinh",
+      "select_image": "Chọn ảnh"
+    }
+  },
+  "change_password": {
+    "name": "Đổi mật khẩu",
+    "new": "Mật khẩu mới",
+    "old": "Mật khẩu cũ",
+    "new_confirm": "Mật khẩu xác nhận"
+  },
+  "history_purchase": {
+    "name": "Lịch sử mua hàng",
+    "all": "Tất cả",
+    "waiting_confirm": "Chờ xác nhận",
+    "waiting_purchase": "Chờ lấy hàng",
+    "delivery": "Đang giao",
+    "delivered": "Đã giao",
+    "canceled": "Đã huỷ"
+  },
+  "register": "Đăng ký",
+  "login": "Đăng nhập",
+  "form_register_login": {
+    "password": "Mật khẩu",
+    "confirm_password": "Mật khẩu xác nhận",
+    "have_not_account": "Bạn chưa có tài khoản",
+    "have_yet_account": "Do you already have an account"
+  }
+}

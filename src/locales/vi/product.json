@@ -1,0 +1,32 @@
+{
+  "category": {
+    "shirt": "Áo thun",
+    "watch": "Đồng hồ",
+    "Phone": "Điện thoại"
+  },
+  "cart": {
+    "name": "Cart",
+    "new_products": "Sản phẩm mới thêm",
+    "add_to_cart": "Thêm hàng vào giỏ",
+    "view_cart": "Xem giỏ hàng",
+    "buy_now": "Mua ngay",
+    "product": "Sản phẩm",
+    "unit_price": "Đơn giá",
+    "total": "Tổng tiền",
+    "select_all": "Chọn tất cả",
+    "total_payment": "Tổng thanh toán",
+    "saving": "Tiết kiệm",
+    "buy": "Mua ngay",
+    "act": "Thao tác",
+    "delete": "Xoá",
+    "empty": "Giỏ hàng của bạn còn trống"
+  },
+  "product": {
+    "sold": "Đã bán",
+    "discount": "Giảm",
+    "available": "Sản phẩm có sẵn",
+    "quantity": "Số lượng",
+    "desc": "Mô tả sản phẩm",
+    "recommended_products": "Có thể bạn sẽ thích"
+  }
+}

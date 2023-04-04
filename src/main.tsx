@@ -7,6 +7,8 @@ import './index.css'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { AppProvider } from './contexts/app.context'
 import ErrorBoundary from './components/ErrorBoundary'
+import 'src/i18n/i18n'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

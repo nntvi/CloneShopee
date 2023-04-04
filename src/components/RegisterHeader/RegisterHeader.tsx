@@ -17,7 +17,7 @@ export default function RegisterHeader() {
             </svg>
           </Link>
 
-          <div className='ml-5 text-xl lg:text-2xl'>{isRegister ? 'Đăng nhập' : 'Đăng ký'}</div>
+          <div className='ml-5 text-xl lg:text-2xl'>{!isRegister ? 'Đăng nhập' : 'Đăng ký'}</div>
         </nav>
       </div>
     </header>

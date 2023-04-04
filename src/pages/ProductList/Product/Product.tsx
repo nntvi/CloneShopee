@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import ProductRating from 'src/components/ProductRating'
 import path from 'src/constant/path'
@@ -11,6 +12,7 @@ interface ProductProps {
 }
 export default function Product(props: ProductProps) {
   const { product } = props
+  const { t } = useTranslation('product')
   return (
     <Link
       to={`${generateNameId({ name: product.name, id: product._id })}`}
@@ -40,7 +42,7 @@ export default function Product(props: ProductProps) {
           <ProductRating rating={product.rating} />
           <div className='ml-2 text-sm'>
             <span>{formatNumberToSocialStyle(product.sold)}</span>
-            <span className='ml-1'>Đã bán</span>
+            <span className='ml-1'>{t('product.sold')}</span>
           </div>
         </div>
       </div>
