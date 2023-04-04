@@ -111,6 +111,7 @@ export default function Register() {
                 name='password'
                 className={'mt-8'}
                 register={register}
+                classNameEye='absolute top-[15px] right-[10px] h-3 w-3 cursor-pointer'
               />
               <Input
                 type='password'
@@ -119,6 +120,7 @@ export default function Register() {
                 name='confirm_password'
                 className={'mt-8'}
                 register={register}
+                classNameEye='absolute top-[15px] right-[10px] h-3 w-3 cursor-pointer'
               />
 
               <div className='mt-3'>

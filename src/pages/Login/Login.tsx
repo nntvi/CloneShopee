@@ -83,6 +83,7 @@ export default function Login() {
                 className={'mt-8'}
                 register={register}
                 rules={rules.password}
+                classNameEye='absolute top-[15px] right-[10px] h-3 w-3 cursor-pointer'
               />
               <div className='mt-3'>
                 <Button

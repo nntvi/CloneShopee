@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios'
 import config from 'src/constant/config'
 import { HttpStatusCode } from './../constant/httpStatusCode'
 import userImage from 'src/assets/images/user.svg'
+import { ErrorResponseApi } from 'src/types/utils.types'
 
 export function checkAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -10,6 +11,17 @@ export function checkAxiosError<T>(error: unknown): error is AxiosError<T> {
 
 export function isAxiosUnprocessableEntityError<FormError>(error: unknown): error is AxiosError<FormError> {
   return checkAxiosError(error) && error.response?.status === HttpStatusCode.UnprocessableEntity
+}
+
+export function isAxiosUnauthorizedError<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {
+  return checkAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized
+}
+
+export function isAxiosExpiredTokenError<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {
+  return (
+    isAxiosUnauthorizedError<ErrorResponseApi<{ name: string; message: string }>>(error) &&
+    error.response?.data?.data?.name === 'EXPIRED_TOKEN'
+  )
 }
 
 // cú pháp `-?` -> loại bỏ undefined của key optional
