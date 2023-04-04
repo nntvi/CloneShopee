@@ -10,15 +10,15 @@ export default class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false
   }
-  public static getDerivedStateFromError() {
+  public static getDerivedStateFromError(_: Error): State {
     return { hasError: true }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.log('Uncaught', error, errorInfo)
   }
 
-  render() {
+  public render() {
     if (this.state.hasError) {
       return (
         <main className='flex h-screen w-full flex-col items-center justify-center'>

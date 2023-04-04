@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import path from 'src/constant/path'
 import { AppContext } from 'src/contexts/app.context'
-// import CartLayout from 'src/layouts/CartLayout'
+import CartLayout from 'src/layouts/CartLayout'
 import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
 // import Cart from 'src/pages/Cart'
@@ -17,11 +17,10 @@ import UserLayout from 'src/pages/User/layouts/UserLayout'
 // import Profile from 'src/pages/User/pages/Profile'
 
 const Login = lazy(() => import('src/pages/Login'))
-const Register = lazy(() => import('src/pages/Register'))
-const CartLayout = lazy(() => import('src/layouts/CartLayout'))
-const Profile = lazy(() => import('src/pages/User/pages/Profile'))
-const ProductDetail = lazy(() => import('src/pages/ProductDetail'))
 const ProductList = lazy(() => import('src/pages/ProductList'))
+const Profile = lazy(() => import('src/pages/User/pages/Profile'))
+const Register = lazy(() => import('src/pages/Register'))
+const ProductDetail = lazy(() => import('src/pages/ProductDetail'))
 const Cart = lazy(() => import('src/pages/Cart'))
 const ChangePassword = lazy(() => import('src/pages/User/pages/ChangePassword'))
 const History = lazy(() => import('src/pages/User/pages/HistoryPurchase/History'))

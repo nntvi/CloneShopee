@@ -15,6 +15,7 @@ import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.types'
 import path from 'src/constant/path'
 import config from 'src/constant/config'
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from './utils'
+import { ErrorResponseApi } from 'src/types/utils.types'
 
 class Http {
   instance: AxiosInstance
@@ -43,7 +44,9 @@ class Http {
           }
           return config
         },
-        (error) => Promise.reject(error)
+        (error) => {
+          return Promise.reject(error)
+        }
       )
 
     this.instance.interceptors.response.use(
@@ -71,12 +74,13 @@ class Http {
         ) {
           const data: any | undefined = error.response?.data
           const errorMessage = data?.message || error.message
-          if (error.code !== 'ECONNABORTED') {
-            toast.error(errorMessage)
-          }
+          // if (error.code !== 'ECONNABORTED') {
+          //   toast.error(errorMessage)
+          // }
+          toast.error(errorMessage)
         }
         // Unauthorized (401) có nhiều TH
-        if (isAxiosUnauthorizedError(error)) {
+        if (isAxiosUnauthorizedError<ErrorResponseApi<{ name: string; message: string }>>(error)) {
           const config = error.response?.config || ({ headers: {} } as InternalAxiosRequestConfig)
           const { url } = config
           // TH token hết hạn và request đó không phải là của request refresh token
@@ -117,7 +121,7 @@ class Http {
           this.accessToken = ''
           this.refreshToken = ''
           clearLocalStorage()
-          // toast.error(error.response?.data.data?.message || error.response?.data.message)
+          toast.error(error.response?.data.data?.message || error.response?.data.message)
         }
         return Promise.reject(error)
       }

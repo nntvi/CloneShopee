@@ -11,7 +11,7 @@ interface QuantityProps extends InputProps {
 }
 export default function QuantityController(props: QuantityProps) {
   const { max, onIncrease, onDecrease, onType, onFocusOut, classNameWrapper = 'ml-10', value, ...rest } = props
-  const [localValue, setLocalValue] = useState<number>(Number(value || 1))
+  const [localValue, setLocalValue] = useState<number>(Number(value || 0))
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let _value = Number(e.target.value)
