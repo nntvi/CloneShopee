@@ -1,4 +1,5 @@
-import { defineConfig } from 'vite'
+// eslint-disable-next-line import/no-unresolved
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import pluginRewriteAll from 'vite-plugin-rewrite-all'
@@ -7,6 +8,9 @@ import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   plugins: [react(), pluginRewriteAll(), visualizer()],
+  test: {
+    environment: 'jsdom'
+  },
   server: {
     port: 3030
   },
