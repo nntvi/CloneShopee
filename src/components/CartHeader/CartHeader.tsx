@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 import path from 'src/constant/path'
 import useSearchProduct from 'src/hooks/useSearchProduct'
 import NavHeader from '../NavHeader'
+import { useTranslation } from 'react-i18next'
 
 export default function CartHeader() {
   const { onSubmitSearch, register } = useSearchProduct()
+  const { t } = useTranslation(['product'])
 
   return (
     <div className='border-b border-black/10'>
@@ -26,7 +28,7 @@ export default function CartHeader() {
                 </svg>
               </div>
               <div className='mx-4 h-6 w-[1px] bg-orange md:h-8'></div>
-              <div className='text-xl capitalize md:text-2xl'>Giỏ hàng</div>
+              <div className='text-xl capitalize md:text-2xl'>{t('product:cart.name')}</div>
             </Link>
 
             <form className='mt-3 md:mt-10 md:w-[50%]' onSubmit={onSubmitSearch}>

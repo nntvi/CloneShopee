@@ -25,5 +25,9 @@
     "asc_price": "Giá từ thấp đến cao",
     "desc_price": "Giá từ cao đến thấp"
   },
-  "home": "Trang chủ"
+  "home": "Trang chủ",
+  "lng": {
+    "vi": "Tiếng Việt",
+    "en": "Tiếng Anh"
+  }
 }

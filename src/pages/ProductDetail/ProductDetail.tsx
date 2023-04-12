@@ -68,7 +68,7 @@ export default function ProductDetail() {
 
     // cách 2 lấy offsetX, offsetY khi ko xử lý đc bubble event
     // const offsetX = e.pageX - (rect.x + window.scrollX)
-    // const offsetY = e.pageX - (rect.y + window.scrollY)
+    // const offsetY = e.pageY - (rect.y + window.scrollY)
 
     const top = offsetY * (1 - naturalHeight / rect.height)
     const left = offsetX * (1 - naturalWidth / rect.width)
@@ -76,7 +76,7 @@ export default function ProductDetail() {
     image.style.height = naturalHeight + 'px'
     image.style.maxWidth = 'unset'
     image.style.top = top + 'px'
-    image.style.height = left + 'px'
+    image.style.left = left + 'px'
   }
 
   const resetZoom = () => {

@@ -29,7 +29,6 @@ export default function NavHeader() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
-
   const changeLanguage = (lng: 'en' | 'vi') => {
     i18n.changeLanguage(lng)
   }

@@ -68,26 +68,27 @@ export class Http {
 
       // xử lí lỗi ko phải 422
       (error: AxiosError) => {
-        // chỉ show lỗi 422 và 401
+        // chỉ show lỗi ko phải 422 và 401
         if (
           ![HttpStatusCode.UnprocessableEntity, HttpStatusCode.Unauthorized].includes(error.response?.status as number)
         ) {
           const data: any | undefined = error.response?.data
           const errorMessage = data?.message || error.message
-          // if (error.code !== 'ECONNABORTED') {
-          //   toast.error(errorMessage)
-          // }
           toast.error(errorMessage)
         }
         // Unauthorized (401) có nhiều TH
         if (isAxiosUnauthorizedError<ErrorResponseApi<{ name: string; message: string }>>(error)) {
+          console.log('====================================')
+          console.log(error.response?.status)
+          console.log('====================================')
           const config = error.response?.config || ({ headers: {} } as InternalAxiosRequestConfig)
           const { url } = config
-          // TH token hết hạn và request đó không phải là của request refresh token
-          // nghĩa là những api bình thuờng mà hết hạn
-          // thì gọi refresh token
 
           if (isAxiosExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
+            // TH token hết hạn và request đó không phải là của request refresh token
+            // nghĩa là những api bình thuờng mà hết hạn
+            // thì gọi refresh token
+
             // hạn chế gọi 2 lần refresh-token-api
 
             // ví dụ cho TH ta thấy bên tab network api refresh token xuất hiện hơn 1 lần sau mỗi lần reload
@@ -121,7 +122,11 @@ export class Http {
           this.accessToken = ''
           this.refreshToken = ''
           clearLocalStorage()
-          toast.error(error.response?.data.data?.message || error.response?.data.message)
+          toast.error(
+            url === 'purchases/add-to-cart'
+              ? 'Vui lòng đăng nhập'
+              : error.response?.data.data?.message || error.response?.data.message
+          )
         }
         return Promise.reject(error)
       }
