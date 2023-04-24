@@ -15,7 +15,7 @@ export default function Product(props: ProductProps) {
   const { t } = useTranslation('product')
   return (
     <Link
-      to={`${generateNameId({ name: product.name, id: product._id })}`}
+      to={`${path.home}${generateNameId({ name: product.name, id: product._id })}`}
       className='overflow-hidden rounded-sm bg-white shadow transition-transform duration-100 hover:translate-y-[-0.0625rem] hover:shadow-md'
     >
       <div className='relative w-full pt-[100%]'>
