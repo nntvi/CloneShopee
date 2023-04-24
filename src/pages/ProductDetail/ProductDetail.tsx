@@ -86,7 +86,7 @@ export default function ProductDetail() {
   // ============================= có thể bạn sẽ thích ===================
   const queryConfig: ProductListConfig = { limit: '10', page: '1', category: product?.category._id }
   const { data: productSuggestions } = useQuery({
-    queryKey: ['product', queryConfig],
+    queryKey: ['products', queryConfig],
     queryFn: () => productApi.getProducts(queryConfig),
     enabled: Boolean(product), // chừng nào product có mới gọi api
     staleTime: 3 * 60 * 1000
