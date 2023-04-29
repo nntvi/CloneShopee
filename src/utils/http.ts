@@ -29,7 +29,7 @@ export class Http {
     // init axios
     this.instance = axios.create({
       baseURL: config.baseUrl,
-      timeout: 1000,
+      // timeout: 1000,
       headers: {
         'Content-Type': 'application/json',
         'expire-access-token': 60 * 60 * 24, // 1 day

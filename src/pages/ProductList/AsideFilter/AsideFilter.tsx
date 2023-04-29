@@ -33,6 +33,7 @@ export default function AsideFilter(props: AsideProps) {
     control,
     handleSubmit,
     trigger,
+    reset,
     formState: { errors }
   } = useForm<FormDataPrice>({
     defaultValues: {
@@ -58,6 +59,7 @@ export default function AsideFilter(props: AsideProps) {
   })
 
   const cancelFilter = () => {
+    reset()
     navigate({
       pathname: path.home,
       search: createSearchParams(omit(queryConfig, ['rating_filter', 'price_max', 'price_min', 'category'])).toString()
