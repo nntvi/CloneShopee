@@ -5,8 +5,20 @@ import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 import useRouteElements from './hooks/useRouteElement'
 import { LocalStorageEventTarget } from './utils/auth'
-import { AppContext } from './contexts/app.context'
+import { AppContext, AppProvider } from './contexts/app.context'
+import { HelmetProvider } from 'react-helmet-async'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import ErrorBoundary from './components/ErrorBoundary'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 0
+    }
+  }
+})
 function App() {
   const routeElements = useRouteElements()
   const { reset } = useContext(AppContext)
@@ -19,11 +31,22 @@ function App() {
     }
   }, [reset])
   return (
-    <div>
-      <ToastContainer />
-      {routeElements}
-    </div>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <ErrorBoundary>
+            {routeElements}
+            <ToastContainer />
+          </ErrorBoundary>
+        </AppProvider>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </HelmetProvider>
   )
+
+  // Test: đặt trường hợp ở file App này
+  // 1. phải render
+  // 2. phải chuyển trang được
 }
 
 export default App
