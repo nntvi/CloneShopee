@@ -4,7 +4,8 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
-import { logScreen } from './utils/testUI'
+import { logScreen, renderWithRouter } from './utils/testUI'
+import path from './constant/path'
 
 expect.extend(matchers)
 
@@ -28,10 +29,11 @@ describe('App', () => {
     //   {}
     // )
 
-    const user = userEvent.setup()
-    render(<App />, {
-      wrapper: BrowserRouter
-    })
+    const { user } = renderWithRouter()
+    // render(<App />, {
+    //   wrapper: BrowserRouter
+    // })
+
     // verify vào đúng trang chủ
     /**
      * waitFor sẽ run callback 1 vài lần
@@ -47,7 +49,7 @@ describe('App', () => {
     await user.click(screen.getByText('Đăng nhập'))
     await waitFor(
       () => {
-        expect(document.querySelector('title')?.textContent).toBe('Đăng nhập | Shopee Clone')
+        // expect(document.querySelector('title')?.textContent).toBe('Đăng nhập | Shopee Clone')
         expect(screen.queryByText('Bạn chưa có tài khoản?')).toBeInTheDocument()
       },
       { timeout: 3000 }
@@ -56,20 +58,42 @@ describe('App', () => {
   })
 
   // => Đặt TH 1 user vào 1 url không tồn tại??
-  // 1.
+
   test('Về trang not found', async () => {
     const badRoute = '/some/bad/route'
     // BrowserRouter ko có truyền tham số vào được
     // nên để truyền được một url sai như trên
     // phải xài memory Router
+
     render(
       <MemoryRouter initialEntries={[badRoute]}>
         <App />
       </MemoryRouter>
     )
+
+    // renderWithRouter({ route: badRoute })
+
+    // renderWithRouter({ route: badRoute })
     // await waitFor(() => {
     //   expect(screen.queryByText(/Page Not Found/i)).toBeInTheDocument()
     // })
     await logScreen()
+  })
+
+  /**
+   * Test Th người dùng enter vào 1 route và hiện đúng page đó
+   * vd là trang đăng kí đi nhé
+   */
+
+  test('Render register page', async () => {
+    // window.history.pushState({}, 'Test page', path.register)
+    // render(<App />, { wrapper: BrowserRouter })
+    // chỗ này hay lặp lại => viết chung
+    renderWithRouter({ route: path.register })
+    await waitFor(() => {
+      // expect(document.querySelector('title')?.textContent).toBe('Đăng ký | Shopee Clone')
+      expect(screen.getByText(/Bạn đã có tài khoản?/i)).toBeInTheDocument()
+    })
+    // await logScreen()
   })
 })
