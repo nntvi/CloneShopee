@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react(), pluginRewriteAll(), visualizer()],
   test: {
     environment: 'jsdom'
+    // setupFiles: path.resolve(__dirname, './vitest.setup.js')
   },
   server: {
     port: 3030

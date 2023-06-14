@@ -51,7 +51,7 @@ export default function ProductList() {
               </div>
 
               {/* pagination */}
-              <Pagination queryConfig={queryConfig} pageSize={productData.data.data.pagination?.page_size} />
+              <Pagination queryConfig={queryConfig} pageSize={20} />
             </div>
           </div>
         )}

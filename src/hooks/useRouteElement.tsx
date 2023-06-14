@@ -97,6 +97,16 @@ export default function useRouteElements() {
       // login roi => vao duoc profile
       children: [
         {
+          path: path.cart,
+          element: (
+            <CartLayout>
+              <Suspense>
+                <Cart />
+              </Suspense>
+            </CartLayout>
+          )
+        },
+        {
           path: path.user,
           element: (
             <MainLayout>
@@ -129,81 +139,76 @@ export default function useRouteElements() {
               )
             }
           ]
-        },
-        {
-          path: path.cart,
-          element: (
-            <CartLayout>
-              <Suspense>
-                <Cart />
-              </Suspense>
-            </CartLayout>
-          )
         }
       ]
     },
-    {
-      path: '',
-      element: <MainLayout />,
-      children: [
-        {
-          path: '',
-          index: true, // tránh trường hợp khi dời vị trí của path này ở đâu cũng ko bị trắng page
-          element: (
-            <Suspense>
-              <ProductList />
-            </Suspense>
-          )
-        },
-        {
-          path: path.productDetail,
-          element: (
-            <Suspense>
-              <ProductDetail />
-            </Suspense>
-          )
-        },
-        {
-          path: '*',
-          element: (
-            <Suspense>
-              <PageNotFound />
-            </Suspense>
-          )
-        }
-      ]
-    }
     // {
     //   path: '',
-    //   index: true, // tránh trường hợp khi dời vị trí của path này ở đâu cũng ko bị trắng page
-    //   element: (
-    //     <MainLayout>
-    //       <Suspense>
-    //         <ProductList />
-    //       </Suspense>
-    //     </MainLayout>
-    //   )
-    // },
-    // {
-    //   path: path.productDetail,
-    //   element: (
-    //     <MainLayout>
-    //       <Suspense>
-    //         <ProductDetail />
-    //       </Suspense>
-    //     </MainLayout>
-    //   )
-    // },
-    // {
-    //   path: '*',
-    //   element: (
-    //     <MainLayout>
-    //       <Suspense>
-    //         <PageNotFound />
-    //       </Suspense>
-    //     </MainLayout>
-    //   )
+    //   element: <MainLayout />,
+    //   children: [
+    //     {
+    //       path: '',
+    //       index: true, // tránh trường hợp khi dời vị trí của path này ở đâu cũng ko bị trắng page
+    //       element: (
+    //         <Suspense>
+    //           <ProductList />
+    //         </Suspense>
+    //       )
+    //     },
+    //     {
+    //       path: path.productDetail,
+    //       element: (
+    //         <Suspense>
+    //           <ProductDetail />
+    //         </Suspense>
+    //       )
+    //     },
+    //     {
+    //       path: '*',
+    //       element: (
+            
+    //         <Suspense>
+    //           <PageNotFound />
+    //         </Suspense>
+    //       )
+    //     }
+    //   ]
     // }
+
+
+
+
+    {
+      path: '',
+      index: true, // tránh trường hợp khi dời vị trí của path này ở đâu cũng ko bị trắng page
+      element: (
+        <MainLayout>
+          <Suspense>
+            <ProductList />
+          </Suspense>
+        </MainLayout>
+      )
+    },
+    {
+      path: path.productDetail,
+      element: (
+        <MainLayout>
+          <Suspense>
+            <ProductDetail />
+          </Suspense>
+        </MainLayout>
+      )
+    },
+    {
+      path: '*',
+      element: (
+        <MainLayout>
+          <Suspense>
+            <PageNotFound />
+          </Suspense>
+        </MainLayout>
+      )
+    }
   ])
   return routeElements
 }
